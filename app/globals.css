@@ -1,26 +1,549 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Ensure proper scrolling behavior */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  min-height: 100vh;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+/* Register your custom font family and tell the browser where to find it. */
+@font-face {
+  font-family: "Poppins-Black";
+  src: url("/fonts/Poppins Black.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins-Bold";
+  src: url("/fonts/Poppins Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins-Semibold";
+  src: url("/fonts/Poppins SemiBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("/fonts/Poppins Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins-Thin";
+  src: url("/fonts/Poppins Thin.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins-Light";
+  src: url("/fonts/Poppins Extra Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Rock-Salt";
+  src: url("/fonts/Rock Salt Regular.woff") format("woff");
+}
+
+/* Animation for gradient text */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+}
+
+.bg-300\% {
+  background-size: 300% 300%;
+}
+
+/* Fix for Radix UI dialogs with page transitions */
+[data-radix-popper-content-wrapper] {
+  z-index: 10000 !important;
+}
+
+.radix-dialog-overlay,
+[role="dialog"] {
+  z-index: 10000 !important;
+}
+
+/* Ensure dialog backdrop is above page transitions */
+[data-state="open"] > .fixed {
+  z-index: 10000 !important;
+}
+
+/* Shadcn dialog fixes */
+[data-radix-dialog-overlay] {
+  z-index: 10000 !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
+[data-radix-dialog-content] {
+  z-index: 10001 !important;
+  position: fixed !important;
+}
+
+/* Ensure dialog portal is not affected by transforms */
+[data-radix-dialog-portal] {
+  position: fixed !important;
+  z-index: 10000 !important;
+}
+
+/* Reset any transforms on body when dialog is open */
+body:has([data-radix-dialog-portal]) {
+  transform: none !important;
+}
+
+/* Ensure the page wrapper doesn't interfere with dialogs */
+body:has([data-radix-dialog-portal]) .page-transition-wrapper {
+  transform: none !important;
+}
+
+@theme {
+  --color-primary: #05df72;
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #b9f8cf;
+  --color-primary-300: #7bf1a8;
+  --color-primary-400: #05df72;
+  --color-primary-500: #00c950;
+  --color-primary-600: #00a63e;
+  --color-primary-700: #008236;
+  --color-primary-800: #016630;
+  --color-primary-900: #0d542b;
+  --color-primary-950: #032e15;
+
+  --color-accent-50: #fefce8;
+  --color-accent-100: #fef9c2;
+  --color-accent-200: #fff085;
+  --color-accent-300: #ffdf20;
+  --color-accent-400: #fdc700;
+  --color-accent-500: #f0b100;
+  --color-accent-600: #d08700;
+  --color-accent-700: #a65f00;
+  --color-accent-800: #894b00;
+  --color-accent-900: #733e0a;
+  --color-accent-950: #432004;
+
+  --color-secondary: #1f2428;
+  --color-secondary-100: #d0d1d2;
+  --color-secondary-200: #a1a2a5;
+  --color-secondary-300: #717478;
+  --color-secondary-400: #42454b;
+  --color-secondary-500: #1f2428;
+  --color-secondary-600: #0f1218;
+  --color-secondary-700: #0b0e12;
+  --color-secondary-800: #08090c;
+  --color-secondary-900: #040506;
+
+  --color-warning-50: #fefce8;
+  --color-warning-100: #fef9c3;
+  --color-warning-200: #fef08a;
+  --color-warning-300: #fde047;
+  --color-warning-400: #facc15;
+  --color-warning-500: #eab308;
+  --color-warning-600: #ca8a04;
+  --color-warning-700: #a16207;
+  --color-warning-800: #854d0e;
+  --color-warning-900: #713f12;
+  --color-warning-950: #422006;
+
+  /* Teal Color Palette */
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+  --color-teal-950: #042f2e;
+
+  /* Orange Color Palette */
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+  --color-orange-950: #431407;
+
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-display: Poppins, system-ui, sans-serif;
+  --font-poppins-black: Poppins-Black, system-ui, sans-serif;
+  --font-poppins-bold: Poppins-Bold, system-ui, sans-serif;
+  --font-poppins-semibold: Poppins-Semibold, system-ui, sans-serif;
+  --font-poppins-regular: Poppins-Regular, system-ui, sans-serif;
+  --font-poppins-thin: Poppins-Thin, system-ui, sans-serif;
+  --font-poppins-light: Poppins-Light, system-ui, sans-serif;
+  --font-rock-salt: Rock-Salt, system-ui, sans-serif;
+
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.5s ease-in-out;
+  --animate-slide-down: slideDown 0.5s ease-in-out;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUp {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slideDown {
+    0% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-hidden;
+}
+
+@utility btn-primary {
+  @apply btn bg-primary-400 hover:bg-primary-600 text-white shadow-md hover:shadow-lg;
+}
+
+@utility btn-secondary {
+  @apply btn bg-primary-600 hover:bg-primary-700 text-white shadow-md hover:shadow-lg;
+}
+
+@utility btn-accent {
+  @apply btn bg-accent-500 hover:bg-accent-600 text-black shadow-md hover:shadow-lg;
+}
+
+@utility btn-outline {
+  @apply btn border-1 border-secondary-500 hover:border-primary-500 dark:border-secondary-700  dark:hover:bg-secondary-800 text-secondary-900 dark:text-secondary-100;
+}
+
+@utility link {
+  @apply inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-hidden;
+}
+
+@utility container-custom {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+@utility section {
+  @apply py-16 md:py-24;
+}
+
+@utility card {
+  @apply bg-white dark:bg-secondary-500/40 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-secondary-200 dark:border-secondary-800;
+}
+
+@utility toolTip {
+  @apply mb-8 text-secondary-900 dark:text-black text-base font-medium bg-white rounded-lg shadow-lg w-fit px-4 py-2 flex items-center justify-center gap-1;
+}
+
+@utility highlightedText {
+  @apply text-white bg-primary-400 rounded-lg px-6 dark:text-secondary-500 shadow-md shadow-accent-500;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  h1 {
+    @apply text-5xl md:text-6xl lg:text-6xl font-extrabold font-poppins-black;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold font-poppins-bold;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold font-poppins-semibold;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  p {
+    @apply text-base md:text-lg leading-relaxed font-poppins-regular;
+  }
+}
+
+/* Animations */
+.fade-in {
+  @apply animate-fade-in;
+}
+
+.slide-up {
+  @apply animate-slide-up;
+}
+
+.slide-down {
+  @apply animate-slide-down;
+}
+
+/* Accessibility */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  @apply outline-hidden ring-2 ring-primary-500 dark:ring-primary-400;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #05df72;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom bullet point styles for BlockNote editor - Only affects custom bullet blocks */
+.custom-bullet-container[data-bullet-type] {
+  @apply flex items-start gap-2 mb-2;
+  position: relative;
+  cursor: text;
+}
+
+.custom-bullet-container[data-bullet-type] .bullet-icon-wrapper {
+  @apply flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-200;
+  min-width: 1.5rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.custom-bullet-container[data-bullet-type] .bullet-icon {
+  @apply transition-colors duration-200;
+}
+
+.custom-bullet-container[data-bullet-type] .bullet-icon.custom-bullet-image {
+  @apply rounded-sm;
+  max-width: 16px;
+  max-height: 16px;
+  object-fit: contain;
+}
+
+.custom-bullet-container[data-bullet-type] .bullet-content {
+  @apply flex-1 min-w-0;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Ensure the text content is properly editable and stays inline - only for custom bullets */
+.custom-bullet-container[data-bullet-type] .bullet-content > * {
+  @apply m-0;
+  outline: none;
+  border: none;
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.custom-bullet-container[data-bullet-type]
+  .bullet-content
+  [contenteditable="true"] {
+  @apply outline-none;
+  min-height: 1.5em;
+  line-height: 1.5;
+  display: inline-block;
+  width: 100%;
+  cursor: text;
+}
+
+.custom-bullet-container[data-bullet-type] .bullet-content span {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+/* Ensure proper spacing in editor - only for custom bullets */
+.custom-bullet-container[data-bullet-type]
+  + .custom-bullet-container[data-bullet-type] {
+  @apply mt-1;
+}
+
+/* Focus styles for better UX - only for custom bullets */
+.custom-bullet-container[data-bullet-type]
+  .bullet-content
+  [contenteditable="true"]:focus {
+  @apply outline-none;
+}
+
+/* Placeholder text for empty bullet points - only for custom bullets */
+.custom-bullet-container[data-bullet-type] .bullet-content:empty::before {
+  content: "Type your text here...";
+  color: #9ca3af;
+  opacity: 0.7;
+  pointer-events: none;
+  display: inline;
+}
+
+/* Prevent line breaks in bullet content - only for custom bullets */
+.custom-bullet-container[data-bullet-type] .bullet-content br {
+  display: none;
 }
