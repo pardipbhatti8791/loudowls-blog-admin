@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node -e \"const fs = require('fs'); const path = './node_modules/@blocknote/mantine/src/mantineStyles.css'; if (fs.existsSync(path)) { fs.writeFileSync(path, '/* Fix for Mantine v8+ compatibility with BlockNote */\\n@import url(\\\"@mantine/core/styles.css\\\");'); console.log('Fixed Mantine CSS imports for BlockNote'); }\""
   },
   "dependencies": {
     "@blocknote/core": "^0.40.0",

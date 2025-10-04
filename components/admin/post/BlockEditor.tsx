@@ -1,17 +1,11 @@
 "use client";
-import {
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { Menu } from "@mantine/core";
 
 const BlockNoteView = lazy(() =>
-  import("@blocknote/mantine").then((mod) => ({ default: mod.BlockNoteView }))
+  import("@blocknote/mantine").then((mod) => ({ default: mod.BlockNoteView })),
 );
 import {
   DragHandleButton,
@@ -23,11 +17,7 @@ import {
   type DefaultReactSuggestionItem,
   createReactBlockSpec,
 } from "@blocknote/react";
-import {
-  type PartialBlock,
-  type Block,
-  defaultProps,
-} from "@blocknote/core";
+import { type PartialBlock, type Block, defaultProps } from "@blocknote/core";
 import { RemoveBlockButton } from "./RemoveBlockButton";
 import { MediaPickerDialog } from "@/components/admin/MediaPickerDialog";
 import {
@@ -47,7 +37,7 @@ type EditorWrapperProps = {
 
 function removeByKeys(
   arr: DefaultReactSuggestionItem[],
-  titleToRemove: string[]
+  titleToRemove: string[],
 ): DefaultReactSuggestionItem[] {
   return arr.filter((item) => !titleToRemove.includes(item.title));
 }
@@ -55,7 +45,7 @@ function removeByKeys(
 function insertAtIndex(
   arr: DefaultReactSuggestionItem[],
   index: number,
-  item: DefaultReactSuggestionItem
+  item: DefaultReactSuggestionItem,
 ): DefaultReactSuggestionItem[] {
   return [...arr.slice(0, index), item, ...arr.slice(index)];
 }
@@ -135,7 +125,7 @@ const _CustomBulletPoint = createReactBlockSpec(
   {
     render: (props) => {
       const bulletType = bulletTypes.find(
-        (b) => b.value === props.block.props.bulletType
+        (b) => b.value === props.block.props.bulletType,
       );
       const BulletIcon = bulletType?.icon || MdCircle;
       const hasCustomIcon =
@@ -155,7 +145,9 @@ const _CustomBulletPoint = createReactBlockSpec(
         if (
           e.currentTarget.closest(".custom-bullet-container[data-bullet-type]")
         ) {
-          const contentElement = e.currentTarget.closest(".custom-bullet-container")?.querySelector('[contenteditable="true"]') as HTMLElement;
+          const contentElement = e.currentTarget
+            .closest(".custom-bullet-container")
+            ?.querySelector('[contenteditable="true"]') as HTMLElement;
           if (contentElement) {
             contentElement.focus();
           }
@@ -244,7 +236,7 @@ const _CustomBulletPoint = createReactBlockSpec(
 
     toExternalHTML: (props) => {
       const bulletType = bulletTypes.find(
-        (b) => b.value === props.block.props.bulletType
+        (b) => b.value === props.block.props.bulletType,
       );
       const BulletIcon = bulletType?.icon || MdCircle;
       const hasCustomIcon =
@@ -277,7 +269,7 @@ const _CustomBulletPoint = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );
 
 export default function EditorWrapper({
@@ -286,7 +278,9 @@ export default function EditorWrapper({
 }: EditorWrapperProps) {
   const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [showBulletMediaPicker, setShowBulletMediaPicker] = useState(false);
-  const [currentBulletBlock, setCurrentBulletBlock] = useState<Block | null>(null);
+  const [currentBulletBlock, setCurrentBulletBlock] = useState<Block | null>(
+    null,
+  );
   const [isMounted, setIsMounted] = useState(false);
 
   const editor = useCreateBlockNote({
@@ -313,12 +307,12 @@ export default function EditorWrapper({
     if (typeof window !== "undefined") {
       window.addEventListener(
         "openBulletMediaPicker",
-        handleBulletMediaPicker as EventListener
+        handleBulletMediaPicker as EventListener,
       );
       return () => {
         window.removeEventListener(
           "openBulletMediaPicker",
-          handleBulletMediaPicker as EventListener
+          handleBulletMediaPicker as EventListener,
         );
       };
     }
@@ -341,11 +335,11 @@ export default function EditorWrapper({
           },
         ],
         editor.getTextCursorPosition().block,
-        "after"
+        "after",
       );
       setShowMediaPicker(false);
     },
-    [editor]
+    [editor],
   );
 
   const handleBulletIconSelect = useCallback(
@@ -357,7 +351,7 @@ export default function EditorWrapper({
       setShowBulletMediaPicker(false);
       setCurrentBulletBlock(null);
     },
-    [currentBulletBlock]
+    [currentBulletBlock],
   );
 
   const getCustomSlashMenuItems = useCallback(
@@ -386,11 +380,11 @@ export default function EditorWrapper({
         (item) =>
           item.title.toLowerCase().includes(query.toLowerCase()) ||
           item.aliases?.some((alias) =>
-            alias.toLowerCase().includes(query.toLowerCase())
-          )
+            alias.toLowerCase().includes(query.toLowerCase()),
+          ),
       );
     },
-    [editor]
+    [editor],
   );
 
   if (!isMounted) {
@@ -462,3 +456,4 @@ export default function EditorWrapper({
     </Suspense>
   );
 }
+
