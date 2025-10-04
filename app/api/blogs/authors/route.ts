@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
@@ -17,7 +17,7 @@ interface Author {
   avatar_url: string;
 }
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     // Get unique authors who have blogs
     const { data, error } = await supabase

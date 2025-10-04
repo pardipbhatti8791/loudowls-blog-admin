@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   TrashIcon,
   Search,
@@ -62,7 +62,7 @@ const BlogManagement: React.FC<BlogManagementProps> = ({ className = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [, setTotalPages] = useState(0);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
@@ -78,37 +78,7 @@ const BlogManagement: React.FC<BlogManagementProps> = ({ className = "" }) => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  useEffect(() => {
-    fetchBlogs(currentPage, itemsPerPage, debouncedSearchTerm, selectedAuthor);
-  }, [currentPage, itemsPerPage, debouncedSearchTerm, selectedAuthor]);
-
-  useEffect(() => {
-    if (currentPage !== 1) {
-      setCurrentPage(1);
-    }
-  }, [debouncedSearchTerm, selectedAuthor]);
-
-  useEffect(() => {
-    fetchAuthors();
-  }, []);
-
-  const fetchAuthors = async () => {
-    try {
-      setAuthorsLoading(true);
-      const response = await fetch("/api/authors");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const { data } = await response.json();
-      setAuthors((data as Author[]) || []);
-    } catch (err) {
-      console.error("Error fetching authors:", err);
-    } finally {
-      setAuthorsLoading(false);
-    }
-  };
-
-  const fetchBlogs = async (
+  const fetchBlogs = useCallback(async (
     page: number = currentPage,
     limit: number = itemsPerPage,
     search: string = "",
@@ -146,6 +116,36 @@ const BlogManagement: React.FC<BlogManagementProps> = ({ className = "" }) => {
       setError("Failed to fetch blogs. Please try again.");
     } finally {
       setLoading(false);
+    }
+  }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    fetchBlogs(currentPage, itemsPerPage, debouncedSearchTerm, selectedAuthor);
+  }, [currentPage, itemsPerPage, debouncedSearchTerm, selectedAuthor, fetchBlogs]);
+
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [debouncedSearchTerm, selectedAuthor, currentPage]);
+
+  useEffect(() => {
+    fetchAuthors();
+  }, []);
+
+  const fetchAuthors = async () => {
+    try {
+      setAuthorsLoading(true);
+      const response = await fetch("/api/authors");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const { data } = await response.json();
+      setAuthors((data as Author[]) || []);
+    } catch (err) {
+      console.error("Error fetching authors:", err);
+    } finally {
+      setAuthorsLoading(false);
     }
   };
 

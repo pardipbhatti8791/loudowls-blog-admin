@@ -71,7 +71,7 @@ export const EditPost: React.FC<CreatePostProps> = ({ data = [], blog }) => {
     "cover",
   );
   const [authors, setAuthors] = useState<Author[]>([]);
-  const [authorsLoading, setAuthorsLoading] = useState(false);
+  const [, setAuthorsLoading] = useState(false);
 
   useEffect(() => {
     fetchAuthors();
@@ -312,7 +312,7 @@ export const EditPost: React.FC<CreatePostProps> = ({ data = [], blog }) => {
                 <Select
                   value={post.author}
                   onValueChange={(value) =>
-                    setPost((prev) => ({ ...prev, author: value as any }))
+                    setPost((prev) => ({ ...prev, author: value }))
                   }
                 >
                   <SelectTrigger className="w-full">
@@ -337,7 +337,7 @@ export const EditPost: React.FC<CreatePostProps> = ({ data = [], blog }) => {
                 <Select
                   value={post.status}
                   onValueChange={(value) =>
-                    setPost((prev) => ({ ...prev, status: value as any }))
+                    setPost((prev) => ({ ...prev, status: value as "draft" | "published" | "archived" }))
                   }
                 >
                   <SelectTrigger className="w-full">

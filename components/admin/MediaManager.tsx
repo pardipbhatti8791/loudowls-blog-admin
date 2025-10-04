@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useCallback } from "react";
-import { Upload, Image as ImageIcon, FileText, Film, Music, X, Search, Grid, List, Download, Trash2, Copy, CheckCircle, Save, Edit3, Plus } from "lucide-react";
+import { Upload, Image as ImageIcon, FileText, Film, Music, X, Search, Grid, List, Download, Copy, CheckCircle, Save, Edit3, Plus } from "lucide-react";
 
 interface MediaFile {
   id: string;
@@ -35,7 +35,6 @@ export const MediaManager: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -117,7 +116,7 @@ export const MediaManager: React.FC = () => {
           description: ''
         });
       }
-    } catch (error) {
+    } catch {
       setEditableData({
         media_id: file.id,
         alt: '',
@@ -191,7 +190,7 @@ export const MediaManager: React.FC = () => {
             description: ''
           });
         }
-      } catch (error) {
+      } catch {
         setEditableData({
           media_id: selectedMedia.id,
           alt: '',

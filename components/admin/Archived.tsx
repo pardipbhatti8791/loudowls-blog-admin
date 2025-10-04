@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { TrashIcon } from "lucide-react";
 import NavPagination from "./Navigation";
 
@@ -40,13 +40,9 @@ const BlogManagement: React.FC<BlogManagementProps> = ({ className = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    fetchBlogs(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
-
-  const fetchBlogs = async (
+  const fetchBlogs = useCallback(async (
     page: number = currentPage,
     limit: number = itemsPerPage,
   ) => {
@@ -70,7 +66,11 @@ const BlogManagement: React.FC<BlogManagementProps> = ({ className = "" }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    fetchBlogs(currentPage, itemsPerPage);
+  }, [currentPage, itemsPerPage, fetchBlogs]);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {

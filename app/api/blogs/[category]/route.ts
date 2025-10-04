@@ -5,22 +5,23 @@ const supabase = createClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
   try {
+    const { category: categoryParam } = await params;
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get("limit") || "3");
-    let category = params.category;
     
-    console.log("category---->", category);
+    console.log("category---->", categoryParam);
     
-    if (!category) {
+    if (!categoryParam) {
       return NextResponse.json(
         { error: "Category is required" },
         { status: 400 }
       );
     }
 
+    let category = categoryParam;
     if (category === "ios-app-development") category = "ios-development";
     if (category === "react-native-development") category = "react-native";
 

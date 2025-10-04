@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef, Suspense, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Upload, Image, Star, Tag, Eye, Save, Settings } from "lucide-react";
 import {
   Select,
@@ -53,7 +53,7 @@ interface BlogPost {
   gradient_colors: string;
   category: string;
   publishDate?: string;
-  status: "draft" | "archived";
+  status: "draft" | "published" | "archived";
   author: string;
 }
 
@@ -94,7 +94,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ data = [] }) => {
   >("coverImage");
 
   const [authors, setAuthors] = useState<Author[]>([]);
-  const [authorsLoading, setAuthorsLoading] = useState(false);
+  const [, setAuthorsLoading] = useState(false);
 
   useEffect(() => {
     fetchAuthors();
@@ -319,7 +319,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ data = [] }) => {
                 <Select
                   value={post.author}
                   onValueChange={(value) =>
-                    setPost((prev) => ({ ...prev, author: value as any }))
+                    setPost((prev) => ({ ...prev, author: value }))
                   }
                 >
                   <SelectTrigger className="w-full">
@@ -344,7 +344,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ data = [] }) => {
                 <Select
                   value={post.status}
                   onValueChange={(value) =>
-                    setPost((prev) => ({ ...prev, status: value as any }))
+                    setPost((prev) => ({ ...prev, status: value as "draft" | "published" | "archived" }))
                   }
                 >
                   <SelectTrigger className="w-full">

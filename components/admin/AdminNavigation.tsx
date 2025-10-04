@@ -5,7 +5,6 @@ import {
   Briefcase, 
   Users, 
   Image,
-  Settings,
   Database,
   Package
 } from "lucide-react";

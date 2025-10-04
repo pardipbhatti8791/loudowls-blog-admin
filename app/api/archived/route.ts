@@ -1,8 +1,8 @@
 // src/pages/api/archived.ts
 import { supabase } from "@/lib/supabase";
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
-export const POST = async ( request:NextResponse) => {
+export const POST = async (request: NextRequest) => {
   try {
     const contentType = request.headers.get("content-type");
     let blogId: string;

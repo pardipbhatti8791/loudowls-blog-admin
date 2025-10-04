@@ -167,7 +167,7 @@ export default function NavBar() {
                           New blog post published
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          "How to build modern UIs" is now live
+                          &ldquo;How to build modern UIs&rdquo; is now live
                         </p>
                         <p className="text-xs text-gray-400 mt-1">
                           1 hour ago

@@ -10,32 +10,6 @@ interface PageProps {
   };
 }
 
-interface Blog {
-  id: string;
-  title: string;
-  content: any;
-  excerpt: string;
-  slug: string;
-  thumbnail: string | null;
-  cover: string | null;
-  is_featured: boolean;
-  tags: string[];
-  gradient_colors?: string;
-  category?: string;
-  name?: string;
-  profile_photo?: string;
-  designation?: string;
-  status: "draft" | "published" | "archived";
-  author?: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  color: string;
-}
 
 export default async function Page({ params }: PageProps) {
   if (!params.id) {

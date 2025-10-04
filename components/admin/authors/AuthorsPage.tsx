@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Plus, Search, Edit, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "../../ui/input";
@@ -17,14 +17,10 @@ const AuthorsPage: React.FC = () => {
   const [selectedAuthor, setSelectedAuthor] = useState<Author | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    fetchAuthors();
-  }, [search, activeFilter]);
-
-  const fetchAuthors = async () => {
+  const fetchAuthors = useCallback(async () => {
     try {
       setLoading(true);
-      const params: any = {};
+      const params: Record<string, string | boolean> = {};
       if (search) params.search = search;
       if (activeFilter !== "all") params.active = activeFilter;
       
@@ -35,7 +31,11 @@ const AuthorsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, activeFilter]);
+
+  useEffect(() => {
+    fetchAuthors();
+  }, [search, activeFilter, fetchAuthors]);
 
   const handleEdit = (author: Author) => {
     setSelectedAuthor(author);

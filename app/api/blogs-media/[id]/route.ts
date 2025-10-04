@@ -3,9 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createClient();
     
     // Check authentication
@@ -17,7 +18,7 @@ export async function GET(
     const { data, error } = await supabase
       .from("blogs-media")
       .select("*")
-      .eq("media_id", params.id)
+      .eq("media_id", id)
       .single();
 
     if (error) {
@@ -36,9 +37,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createClient();
     
     // Check authentication
@@ -47,7 +49,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const mediaId = params.id;
+    const mediaId = id;
     if (!mediaId) {
       return NextResponse.json(
         { error: "Media ID is required" },
