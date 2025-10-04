@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LucideMoveDiagonal } from "lucide-react";
+import { LucideMoveDiagonal, User } from "lucide-react";
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/client";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,12 +12,12 @@ export default function Sidebar() {
 
   const pathname = usePathname();
   const router = useRouter();
-    const supabase = createClient()
+  const supabase = createClient();
 
   useEffect(() => {
     async function checkUser() {
       const { data: authData } = await supabase.auth.getUser();
-      console.log('authData', authData)
+      console.log("authData", authData);
       if (!authData?.user) {
         router.push("/auth/login");
       }
@@ -71,6 +71,14 @@ export default function Sidebar() {
                   icon={<LucideMoveDiagonal className="mr-3 h-5 w-5" />}
                   active={pathname.startsWith("/admin/media")}
                 />
+                <NavItem
+                  href="/admin/authors"
+                  label="Authors"
+                  icon={
+                    <User className="mr-3 h-5 w-5 text-gray-500 group-hover:text-white dark:text-gray-400" />
+                  }
+                  active={pathname.startsWith("/admin/authors")}
+                />
               </Section>
             </div>
 
@@ -101,7 +109,13 @@ export default function Sidebar() {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-1 pt-4">
       <div className="px-3 py-2">
